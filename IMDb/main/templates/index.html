@@ -1,0 +1,69 @@
+<!doctype html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title> App </title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+    <script>
+        $('document').ready(function () {
+            console.log('Front-end is loaded');
+            $('#rating-form').submit(function (event) {
+                event.preventDefault();
+                var review = this['review'].value;
+                var URL = this.action;
+                var data = { review: review };
+                $.ajax({
+                    url: URL,
+                    type: 'POST',
+                    data: data,
+                    success: function (response, textStatus, JQXHR) {
+var result = JSON.parse(response);
+                        $('#result-table').css('display', 'table');
+                        $('#rating-value').text(result['rating']);
+                        $('#class-value').text(result['class']);
+console.log('Original response:', response);
+console.log('converted result: ', result);
+                    },
+                    error: function (JQXHR, textStatus, errorThrown) {
+                        alert(errorThrown);
+                    }
+                });
+            });
+        });
+
+    </script>
+    <style>
+        #result-table {
+            display: none;
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <h1> Get review rating </h1>
+    </header>
+    <main>
+        <form method="post" action="/rating" id="rating-form">
+            <textarea id="rating-form-review" name="review" required="true"
+                placeholder="Write your review here"></textarea>
+            <input type="submit" value="Get rating" />
+        </form>
+        <table id="result-table">
+            <tr>
+                <td> Rating </td>
+                <td id="rating-value"></td>
+            </tr>
+            <tr>
+                <td> Class </td>
+                <td id="class-value"> </td>
+            </tr>
+        </table>
+    </main>
+    <footer>
+        Copirite information goes here
+    </footer>
+</body>
+
+</html>
